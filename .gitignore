@@ -1,0 +1,11 @@
+.idea/*
+*.iml
+/target**
+/.settings**
+.classpath
+.project
+.gwt
+.gwt-unitCache**
+/src/main/webapp/WEB-INF/classes/**
+chromedriver.log
+bin**

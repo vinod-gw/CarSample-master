@@ -1,0 +1,194 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+	xmlns:g='urn:import:com.google.gwt.user.client.ui'
+	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+	ui:generateLocales='default'>
+	<ui:style>
+	  .globalWrapper {
+            min-height: 100% position:relative;
+        }
+        
+       .secondary {
+    color: #666666;
+    font-size: 11px;
+    line-height: 18px;
+}
+        
+        .header-bar {
+            background: none repeat scroll 0 0 #FFFFFF;
+            height: 80%;
+            overflow: hidden;
+            margin-bottom:50px;
+        }
+        
+        
+        .clearfix:after, .radio-option:after {
+            clear: both;
+            content: ".";
+            display: block;
+            font-size: 0;
+            height: 0;
+            visibility: hidden;
+        }
+ 		.main {
+		    margin: 0 auto;
+		    max-width: 650px;
+		    padding-bottom: 100px;
+		    padding-top: 23px;
+		}
+
+	    .content {
+            padding: 0 44px;
+        }
+        
+        .header .logo {
+            height: 16px;
+			width: 16px;
+        }
+        
+        .main h1:first-child {
+    		margin: 0 0 0.92em;
+		}
+
+			h1, h2, h3, h4, h5, h6 {
+		    color: #222222;
+		    font-size: 1.54em;
+		    font-weight: normal;
+		    line-height: 24px;
+		    margin: 0 0 0.46em;
+		}
+        
+        .errormsg {
+		    color: #DD4B39;
+		    display: none;
+		    line-height: 0px;
+		    margin: 0.5em 0 0;
+		}
+		
+		
+		.recovery .hideable-wrapper {
+	    	-moz-transition: all 500ms ease-in-out 0s;
+	    	overflow: hidden;
+		}
+		.recovery .stacked-label {
+		    line-height: 18px;
+		    margin-bottom: 8px;
+		}
+		
+		.recovery .hideable-box div {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+		.button{
+	margin-top:10px;
+}
+		
+	</ui:style>
+<ui:with field="resource" type="com.arcbees.carsample.client.Resources" />
+	<g:HTMLPanel>
+	<!-- wrapper section starts -->
+	 	<g:HTMLPanel styleName="{style.globalWrapper}">
+	 	<!-- header section starts -->
+	        <g:HTMLPanel ui:field="header" styleName="{style.header-bar}">
+	            <div class="{style.header} {style.content} {style.clearfix}">
+	                <g:Image styleName="{style.logo}" resource="{resource.glaceLogo}"
+	                    altText="Glenwood Logo" />
+	            </div>
+	        </g:HTMLPanel>
+	    <!-- header section ends -->
+	    <!-- body section starts -->
+	        <g:HTMLPanel ui:field="body" styleName="{style.main} {style.clearfix} {style.content} {style.recovery}">
+	         
+	        <h1>Having trouble signing in?</h1>
+	        	<!-- form starts -->
+	        	<g:HTMLPanel>
+	        	<g:HTMLPanel >
+	        	<!-- error div starts -->
+	        	<div class="{style.errormsg}">Please enter valid email address</div>
+	            <!-- error div ends -->
+	        	<p></p>	
+	        	<div>
+		        	<g:RadioButton  ui:field="password" name="radio">Don't know password</g:RadioButton>
+		        	<g:HTMLPanel ui:field="hide1"  styleName="{style.hideable-wrapper}" height="0px">
+		        	<!-- hide div starts -->
+		        	<div class="{style.hideable-box}">
+		        	<div class="{style.secondary}">To reset your password, enter the username you use to sign in to Google. This can be your Gmail address, or it may be another email address you associated with your account.</div>
+		        	<div class="{style.stacked-label}">E-Mail Address</div>
+		        	<g:TextBox ui:field="email1" name="email" maxLength="25"></g:TextBox>
+		        	
+		        	</div>
+		        	</g:HTMLPanel>
+		        </div>
+		        <!-- hide div ends -->
+		        </g:HTMLPanel>
+		        <!-- end of pwd radio -->
+		        <g:HTMLPanel >
+	        	<!-- error div starts -->
+	        	<div class="{style.errormsg}">Please enter valid email address</div>
+	            <!-- error div ends -->
+	        	<p></p>	
+	        	<div>
+		        	<g:RadioButton  ui:field="accid" name="radio">Don't know Account ID</g:RadioButton>
+		        	<g:HTMLPanel ui:field="hide3"  styleName="{style.hideable-wrapper}" height="0px">
+		        	<!-- hide div starts -->
+		        	<div class="{style.hideable-box}">
+		        	<div class="{style.secondary}">To reset your password, enter the username you use to sign in to Google. This can be your Gmail address, or it may be another email address you associated with your account.</div>
+		        	<div class="{style.stacked-label}">E-Mail Address</div>
+		        	<g:TextBox ui:field="email3" name="email" maxLength="25"></g:TextBox>
+		        	
+		        	</div>
+		        	</g:HTMLPanel>
+		        </div>
+		        <!-- hide div ends -->
+		        </g:HTMLPanel>
+		        <!-- end of accid -->
+		         <g:HTMLPanel >
+	        	
+	        	<div>
+		        	<g:RadioButton  ui:field="username" name="radio">Don't know username</g:RadioButton>
+		        	</div></g:HTMLPanel>
+		       
+		        <g:HTMLPanel >
+	        	
+	        	<div>
+		        	<g:RadioButton  ui:field="other" name="radio">Other problems</g:RadioButton>
+		        	<!-- hide div starts -->
+		        	<g:HTMLPanel ui:field="hide2"  styleName ="{style.hideable-wrapper}" height="0px">
+		        	<div class="{style.hideable-box}">
+		        	<div class="{style.secondary}">Enter the username you use to sign in to Google. This can be your Gmail address, or it may be another email address you associated with your account.</div>
+		        	<div class="{style.stacked-label}">E-Mail Address</div>
+		        	<g:TextBox ui:field="email2" name="email" maxLength="25"></g:TextBox>
+		        	
+		        	</div>
+		        	</g:HTMLPanel>
+		        </div>
+		        <!-- hide div ends -->
+		        </g:HTMLPanel>
+		        <div class = "{style.button}">
+		         <g:Button  ui:field="glacelogin" debugId="login" text="Continue"/>
+		        </div>
+		        </g:HTMLPanel>
+		        <!-- form ends -->
+	        
+	        	
+	        </g:HTMLPanel>
+	     <!-- body section ends -->
+        </g:HTMLPanel>
+    <!-- wrapper ends -->
+	</g:HTMLPanel>
+    
+        
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</ui:UiBinder>

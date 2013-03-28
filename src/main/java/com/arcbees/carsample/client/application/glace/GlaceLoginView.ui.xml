@@ -1,0 +1,244 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+    xmlns:g='urn:import:com.google.gwt.user.client.ui' ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+    ui:generateKeys='com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator'
+    ui:generateLocales='default'>
+
+    <ui:style>
+        .globalWrapper {
+            min-height: 100% position:relative;
+        }
+        
+        .floatLeft {
+            float: left;
+        }
+        
+        .header-bar {
+            background: none repeat scroll 0 0 #FFFFFF;
+            height: 80%;
+            overflow: hidden;
+        }
+        
+        .clearfix:after {
+            clear: both;
+            content: ".";
+            display: block;
+            font-size: 0;
+            height: 0;
+            visibility: hidden;
+        }
+        
+        .content {
+            padding: 0 44px;
+        }
+        
+        .header .logo {
+            height: 16px;
+			width: 16px;
+        }
+        
+        .sign-in {
+            float: right;
+            width: 300px;
+        }
+        .system-alert {
+            margin: 0 385px 0 0;	
+			margin: 0 0 1.5em;
+            width: 600%;
+            
+        }
+        .news-feed {	
+            float: left;
+            width: 240px;
+        }
+        .support-info {
+            float: left;
+            width: 240px;
+        }
+        
+        .main {
+            max-width: 1000px;
+            min-width: 780px;
+            width: auto;
+            margin: 0 auto;
+            
+            padding-top: 13px;
+        }
+        
+        .formRow {
+            margin-bottom: 9%;
+            vertical-align: middle;
+			margin-left: 20%;
+        }
+        .formRow1 {
+            margin-bottom: 9%;
+            text-align: center;
+        }
+        .makebold {
+            text-align:center;
+			
+			font-size: 13px;
+			margin-bottom: 9%;
+			font-weight: bold;
+        }
+        .makebold1 {
+            text-align:center;
+			
+			font-size: 13px;
+			
+			font-weight: bold;
+        }
+        .footer {
+            text-align:right;
+			
+        }
+        
+        
+    
+    </ui:style>
+
+    <ui:with field="resource" type="com.arcbees.carsample.client.Resources" />
+
+    <g:HTMLPanel styleName="{style.globalWrapper}">
+        <g:HTMLPanel ui:field="header" styleName="{style.header-bar}">
+            <div class="{style.header} {style.content} {style.clearfix}">
+                <g:Image styleName="{style.logo}" resource="{resource.glaceLogo}"
+                    altText="Glenwood Logo" />
+            </div>
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="body" styleName="{style.main} {style.content} {style.clearfix}">
+            <g:HTMLPanel ui:field="loginpanel" styleName="{style.sign-in}">
+                <div>
+                    <div class="{style.makebold}">
+                    <h2>
+                        Enter GlaceEMR
+                        <strong></strong>
+                    </h2>
+					</div>
+                    <div class="{style.formRow}">
+                        <g:TextBox ui:field="username" debugId="username" />
+                    </div>
+                    <div class="{style.formRow}">
+                        <g:PasswordTextBox ui:field="password" debugId="password" />
+                    </div>
+                    <div class="{style.formRow}">
+                        <g:TextBox ui:field="accountid" debugId="accountid" />
+                    </div>
+                    
+                    <div class="{style.formRow}" debugId="remember">
+                        <g:CheckBox ui:field="checkbox" text="Remember me"/>
+                        <g:Button ui:field="glacelogin" debugId="login" text="Login"/>
+                    </div>
+                    <div class="{style.formRow}" debugId="remember">
+                       <g:Hyperlink ui:field="access" text="Cannot access your account?" targetHistoryToken="access"></g:Hyperlink>
+					   <g:Hyperlink ui:field="frnd" text="Refer a friend" targetHistoryToken="cars"	></g:Hyperlink>
+                    </div>
+                    <div class="{style.makebold1}" debugId="emr4">
+						<h2>GlaceEMRv4.5</h2>
+					</div>
+					<div class="{style.formRow1}" debugId="release">
+						<h2>Release Date 05/01/2010</h2>
+					</div>
+					<div class="{style.formRow1}" debugId="help">
+						<g:Hyperlink ui:field="help" text="Help and FAQs" targetHistoryToken="cars"></g:Hyperlink>
+					</div>
+
+                    
+                </div>
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="alert" styleName="{style.system-alert}">
+
+                <strong>System Alerts</strong>
+                <p>
+                    <b>07 Feb 2013 10:45 PM ET</b>
+                    <br />
+                    Technical Bulletin for Customers with in-house servers: Enhanced
+                    data backup required by February 28, 2013.
+                    Please click to read more.
+                </p>
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="feed" styleName="{style.news-feed}">
+                <strong>News feed</strong>
+                <br />
+
+                Jan 16, 2013
+                <br />
+                ONC GlaceEMR Certificate
+                <br />
+                Download the certificate
+                <br />
+                <br />
+                Dec 19, 2012
+                <br />
+                CMS: Meaningful Use for Specialists Tipsheet
+                <br />
+                Read more
+                <br />
+                <br />
+
+                Nov 29, 2012
+                <br />
+                Interested in processing credit card payments from your office?
+                <br />
+                Read more
+                <br />
+                <br />
+
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="support" styleName="{style.support-info}">
+
+                <strong>Support</strong>
+                <br />
+                <br />
+                Cannot access your account?
+                <br />
+                <br />
+
+                Software support Helpdesk
+                <br />
+                <br />
+                Hours
+                <br />
+                Monday to Friday
+                <br />
+                from 8:30 AM ET to 7:00 PM ET.
+                <br />
+                Phone
+                <br />
+                (877) 728-7070
+                <br />
+                Email
+                <br />
+                techsupport@glenwoodmicro.net
+                <br />
+                <br />
+
+                Billing support Helpdesk
+                <br />
+                <br />
+                Hours
+                <br />
+                Monday to Friday
+                <br />
+                from 8:00 AM ET to 5:30 PM ET.
+                <br />
+                Phone
+                <br />
+                (877) 7233-3656
+                <br />
+                Email
+                <br />
+                billingsupport@glenwoodmicro.net
+                <br />
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+        <g:HTMLPanel ui:field="footer" styleName="{style.footer}">
+        <p>
+			Private Policy | Copyright Information | Disclaimer and terms of use
+			|Contact Us.© Copyright 2009 Glenwood Systems, LLC. All Rights
+			Reserved.
+		</p>
+        </g:HTMLPanel>
+    </g:HTMLPanel>
+</ui:UiBinder>

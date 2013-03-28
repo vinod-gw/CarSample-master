@@ -1,0 +1,656 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.arcbees.samples</groupId>
+    <artifactId>CarSample</artifactId>
+    <version>0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>CarSample</name>
+
+    <properties>
+        <!-- Tomcat Defaults -->
+        <tomcat.path>/${project.artifactId}-local</tomcat.path>
+        <tomcat.server.url>http://demos.arcbees.com/manager/text</tomcat.server.url>
+
+        <!-- GWT -->
+        <gwt.version>2.5.0</gwt.version>
+        <arcbees-core.version>1.0-SNAPSHOT</arcbees-core.version>
+        <gwtp.version>0.8-SNAPSHOT</gwtp.version>
+        <guice.version>3.0</guice.version>
+        <gin.version>2.0.0</gin.version>
+        <gwt.style>OBF</gwt.style>
+
+        <!-- Client and Server -->
+        <junit.version>4.10</junit.version>
+        <mockito.version>1.9.5</mockito.version>
+        <jukito.version>1.1</jukito.version>
+        <mysql-connector.version>5.1.21</mysql-connector.version>
+        <postgresql.version>9.1-901.jdbc4</postgresql.version>
+        <hibernate.version>4.1.4.Final</hibernate.version>
+        <hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
+        <gwtquery-version>1.1.0</gwtquery-version>
+        <jbcrypt.version>0.3m</jbcrypt.version>
+        <selenium.version>2.25.0</selenium.version>
+        <cucumber.version>1.0.14</cucumber.version>
+        <guava.version>13.0.1</guava.version>
+        <javax.validation.version>1.0.0.GA</javax.validation.version>
+        <persistence-api.version>1.0.2</persistence-api.version>
+
+        <!-- Maven -->
+        <gwt-maven-plugin.version>2.5.0</gwt-maven-plugin.version>
+        <maven-surefire-plugin.version>2.9</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>2.12</maven-failsafe-plugin.version>
+        <maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
+        <maven-war-plugin.version>2.2</maven-war-plugin.version>
+        <maven-deploy-plugin.version>2.7</maven-deploy-plugin.version>
+        <tomcat-maven-plugin.version>2.0</tomcat-maven-plugin.version>
+        <jetty-plugin.version>8.1.0.v20120127</jetty-plugin.version>
+
+        <target.jdk>1.6</target.jdk>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.deployment.encoding>UTF-8</project.deployment.encoding>
+
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+    </properties>
+
+    <build>
+        <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <proc>none</proc>
+                </configuration>
+            </plugin>
+
+            <!-- JUnit Testing - skip *.GwtTest cases -->
+            <!-- 'mvn test' - runs the Jukito tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*GwtTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- GWT -->
+            <!-- First run 'mvn package -Ppostgres' to setup persistence.xml -->
+            <!-- run 'mvn gwt:run' for running application from terminal -->
+            <!-- run 'mvn integration-test' for running the GwtTestSuite -->
+            <!-- run 'mvn clean install' will build war to local repo ~/.m2/com/arcbees/samples/CarSample/*.war -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt-maven-plugin.version}</version>
+                <configuration>
+                    <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+
+                    <strict>true</strict>
+                    <testTimeOut>180</testTimeOut>
+                    <!-- With multiple tests use GwtTestSuite.java for speed -->
+                    <includes>**/*GwtTest.java</includes>
+                    <!-- <includes>**/*GwtTestSuite.java</includes> -->
+                    <mode>htmlunit</mode>
+
+                    <extraJvmArgs>-Xss1024k -Xmx1024m -XX:MaxPermSize=256m</extraJvmArgs>
+                    <logLevel>INFO</logLevel>
+                    <style>${gwt.style}</style>
+
+                    <copyWebapp>true</copyWebapp>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+
+                    <runTarget>CarSample.html</runTarget>
+                    <modules>
+                        <module>com.arcbees.carsample.CarSample</module>
+                        <module>com.arcbees.carsample.PhoneGapBuild</module>
+                    </modules>
+
+                    <compileReport>true</compileReport>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Skip deploying to remote url -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>${maven-deploy-plugin.version}</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <webappDirectory>${webappDirectory}</webappDirectory>
+                    <webResources>
+                        <resource>
+                            <directory>resourceTemplates/webapp</directory>
+                            <filtering>true</filtering>
+                            <includes>
+                                <include>persistence.xml</include>
+                            </includes>
+                            <targetPath>WEB-INF/classes/META-INF</targetPath>
+                        </resource>
+                    </webResources>
+                </configuration>
+            </plugin>
+
+            <!-- Tomcat deployment configuration -->
+            <!-- See more: http://tomcat.apache.org/maven-plugin-2.0/tomcat7-maven-plugin/usage.html -->
+            <!-- run 'mvn clean deploy -Pdeploy-demo' -->
+            <!-- run 'mvn tomcat7:deploy -Pdeploy-demo -DskipTests -X' debug deploy -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat-maven-plugin.version}</version>
+                <configuration>
+                    <!-- add the security credentials to ~/.m2/settings.xml <id>...</id> -->
+                    <server>arcbees-tomcat</server>
+                    <path>${tomcat.path}</path>
+                    <url>${tomcat.server.url}</url>
+                    <update>true</update>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Integration testing which runs clases *TestInt.java -->
+            <!-- run 'mvn integration-test' -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>integration-test</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                <include>**/*TestInt.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>verify</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Server for running Cucumber tests *TestInt.java -->
+            <!-- 'mvn jetty:run' deploys and starts -->
+            <!-- mvn jetty:start -->
+            <!-- mvn jetty:stop -->
+            <!-- mvn jetty:run -->
+            <!-- mvn integration-test -Pintegration-test -->
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jetty-plugin.version}</version>
+                <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <stopPort>9966</stopPort>
+                    <stopKey>stop-jetty</stopKey>
+                    <webAppSourceDirectory>${webappDirectory}</webAppSourceDirectory>
+                    <webApp>
+                        <descriptor>${webappDirectory}/WEB-INF</descriptor>
+                    </webApp>
+                    <systemProperties>
+                        <systemProperty>
+                            <name>jetty.port</name>
+                            <value>8888</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start-jetty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <daemon>true</daemon>
+                            <scanIntervalSeconds>0</scanIntervalSeconds>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>stop-jetty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>sonatype.snapshots</id>
+            <name>Sonatype snapshot repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>apache.snapshots</id>
+            <name>Apache Snapshots</name>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencies>
+        <!-- Google Web Toolkit dependencies -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- GWT-Platform dependencies -->
+        <dependency>
+            <groupId>com.arcbees.core</groupId>
+            <artifactId>arcbees-core</artifactId>
+            <version>${arcbees-core.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.restlet</artifactId>
+                    <groupId>org.restlet.gae</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>org.restlet.ext.servlet</artifactId>
+                    <groupId>org.restlet.gae</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-mvp-client</artifactId>
+            <version>${gwtp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-client</artifactId>
+            <version>${gwtp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-server-guice</artifactId>
+            <version>${gwtp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-shared</artifactId>
+            <version>${gwtp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-processors</artifactId>
+            <version>${gwtp.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- DI dependencies -->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-assistedinject</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.gwt.inject</groupId>
+            <artifactId>gin</artifactId>
+            <version>${gin.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Persistence dependencies -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>persistence-api</artifactId>
+            <version>${persistence-api.version}</version>
+        </dependency>
+
+        <!-- Other dependencies -->
+        <dependency>
+            <groupId>com.googlecode.gwtquery</groupId>
+            <artifactId>gwtquery</artifactId>
+            <version>${gwtquery-version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <version>${guava.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>${jbcrypt.version}</version>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jukito</groupId>
+            <artifactId>jukito</artifactId>
+            <version>${jukito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-guice</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>info.cukes</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <tomcat.path>/carsample-local</tomcat.path>
+                <persistence.server.address>192.168.2.4</persistence.server.address>
+                <persistence.database>carsample</persistence.database>
+                <hibernate.hbm2ddl.auto>update</hibernate.hbm2ddl.auto>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>testing</id>
+            <properties>
+                <tomcat.path>/carsample-test</tomcat.path>
+                <persistence.server.address>192.168.2.4</persistence.server.address>
+                <persistence.database>carsample</persistence.database>
+                <hibernate.hbm2ddl.auto>create-drop</hibernate.hbm2ddl.auto>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>staging</id>
+            <properties>
+                <tomcat.path>/carsample-staging</tomcat.path>
+                <persistence.server.address>192.168.2.4</persistence.server.address>
+                <persistence.database>carsample_staging</persistence.database>
+                <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>production</id>
+            <properties>
+                <tomcat.path>/ROOT</tomcat.path>
+                <persistence.server.address>192.168.2.4</persistence.server.address>
+                <persistence.database>carsample</persistence.database>
+                <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+            </properties>
+        </profile>
+
+        <!-- run 'mvn clean deploy -Pdeploy-demo -DskipTests' -->
+        <profile>
+            <id>deploy-demo</id>
+            <properties>
+                <tomcat.path>/carsample-v4</tomcat.path>
+                <persistence.server.address>192.168.2.4</persistence.server.address>
+                <persistence.database>carsample</persistence.database>
+                <hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+                <persistence.unit>carsample</persistence.unit>
+                <hibernate.connection.driver_class>org.postgresql.Driver</hibernate.connection.driver_class>
+                <hibernate.connection.url>
+                    jdbc:postgresql://${persistence.server.address}:5432/${persistence.database}
+                </hibernate.connection.url>
+                <hibernate.connection.username>glace</hibernate.connection.username>
+                <hibernate.connection.password>glacenxt</hibernate.connection.password>
+                <hibernate.dialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernate.dialect>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>${postgresql.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>postgresql</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <persistence.unit>carsample</persistence.unit>
+                <hibernate.connection.driver_class>org.postgresql.Driver</hibernate.connection.driver_class>
+                <hibernate.connection.url>
+                    jdbc:postgresql://${persistence.server.address}:5432/${persistence.database}
+                </hibernate.connection.url>
+                <hibernate.connection.username>glace</hibernate.connection.username>
+                <hibernate.connection.password>glacenxt</hibernate.connection.password>
+                <hibernate.dialect>org.hibernate.dialect.PostgreSQL82Dialect</hibernate.dialect>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>postgresql</groupId>
+                    <artifactId>postgresql</artifactId>
+                    <version>${postgresql.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
+            <id>mysql</id>
+            <properties>
+                <persistence.unit>carsample</persistence.unit>
+                <hibernate.connection.driver_class>com.mysql.jdbc.Driver</hibernate.connection.driver_class>
+                <hibernate.connection.url>
+                    jdbc:mysql://${persistence.server.address}:3306/${persistence.database}
+                </hibernate.connection.url>
+                <hibernate.connection.username>glace</hibernate.connection.username>
+                <hibernate.connection.password>glacenxt</hibernate.connection.password>
+                <hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <version>${mysql-connector.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <!-- Build a phone gap zip -->
+        <!-- 1. 'mvn package' -->
+        <!-- 2. 'mvn resources:copy-resources jar:jar antrun:run -Pbuild-phonegap' -->
+        <profile>
+            <id>build-phonegap</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <outputDirectory>target/phonegap</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${webappDirectory}</directory>
+                                    <excludes>
+                                        <exclude>**META-INF/**</exclude>
+                                        <exclude>**WEB-INF/**</exclude>
+                                    </excludes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-jar</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- 3. 'mvn antrun:run -Pbuild-jar' -->
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/${project.build.finalName}.jar" 
+                                    tofile="${project.build.directory}/CarSample-Phonegap-Release.zip" />
+                            </target>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

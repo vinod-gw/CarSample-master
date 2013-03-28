@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module rename-to='CarSample'>
+    <!-- Inherit the core Web Toolkit stuff.                        -->
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.inject.Inject'/>
+
+    <!-- Inherit the default GWT style sheet.                       -->
+    <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+
+    <!-- Other module inherits                                      -->
+    <inherits name='com.gwtplatform.dispatch.Dispatch'/>
+    <inherits name="com.arcbees.core.Mvp"/>
+    <inherits name="com.google.gwt.query.Query"/>
+
+    <!-- Logging Settings                                           -->
+    <inherits name="com.google.gwt.logging.Logging"/>
+    <set-property name="gwt.logging.logLevel" value="INFO"/>
+    <set-property name="gwt.logging.enabled" value="TRUE"/>
+
+    <!-- Guava                                                      -->
+    <inherits name="com.google.common.collect.Collect"/>
+
+    <!-- Specify the app entry point class.                         -->
+    <entry-point class='com.arcbees.carsample.client.CarSample'/>
+
+    <!-- TODO create a testing module for this    -->
+    <!-- Allows the use of debugId (for selenium) -->
+    <inherits name='com.google.gwt.user.Debug'/>
+
+    <!-- Global Style -->
+    <stylesheet src="styles-global.css"/>
+
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='shared'/>
+
+    <!-- Form Factors -->
+    <inherits name="com.arcbees.carsample.FormFactor"/>
+
+    <set-configuration-property name='gin.ginjector' value='com.arcbees.carsample.client.gin.ClientGinjector'/>
+</module>
